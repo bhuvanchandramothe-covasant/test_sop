@@ -1,0 +1,76 @@
+{
+  "tenants": {
+    "default": {
+      "system_prompt": "You are a store policy and standard operating procedure assistant. You can ONLY provide information about policies and procedures that are in our knowledge base. You must NEVER make up policy information or use general knowledge about policies not in our system.",
+      "retrieval_prompt": "Generate a concise one-line search query based on: {conversation}\nUser query: {search_query}\nOutput only the search query:",
+      "rag_prompt": "Answer using ONLY the policy information provided below.\n\nConversation History:\n{conversation}\n\nPolicy Documents:\n{context}\n\nUser query: {search_query}\n\nYour response:",
+      "vector_search": {
+        "endpoint_name": "sop-policy-vectors",
+        "index_name": "agent_brick.default.sop_policy_index",
+        "columns": {
+          "id": "id",
+          "text": "chunk_text",
+          "source": "source_path"
+        }
+      },
+      "retrieval_config": {
+        "top_k": 8,
+        "score_threshold": 0.6
+      },
+      "llm_config": {
+        "retrieval_model": "databricks-meta-llama-3-1-70b-instruct",
+        "response_model": "databricks-meta-llama-3-1-70b-instruct",
+        "retrieval_temperature": 0.1,
+        "response_temperature": 0.7
+      }
+    },
+    "tenant_a": {
+      "system_prompt": "You are a store policy assistant for Tenant A.",
+      "retrieval_prompt": "Generate a concise search query for Tenant A policies: {search_query}",
+      "rag_prompt": "Answer using the context below for Tenant A.\n\nContext:\n{context}\n\nQuestion: {search_query}",
+      "vector_search": {
+        "endpoint_name": "sop-policy-vectors",
+        "index_name": "agent_brick.default.sop_policy_index",
+        "columns": {
+          "id": "id",
+          "text": "chunk_text",
+          "source": "source_path"
+        }
+      },
+      "retrieval_config": {
+        "top_k": 3,
+        "score_threshold": 0.6
+      },
+      "llm_config": {
+        "retrieval_model": "databricks-meta-llama-3-1-70b-instruct",
+        "response_model": "databricks-meta-llama-3-1-70b-instruct",
+        "retrieval_temperature": 0.2,
+        "response_temperature": 0.1
+      }
+    },
+    "tenant_b": {
+      "system_prompt": "You are a store policy assistant for Tenant B.",
+      "retrieval_prompt": "Extract key search terms: {conversation}",
+      "rag_prompt": "Answer based on: {context}",
+      "vector_search": {
+        "endpoint_name": "sop-policy-vectors",
+        "index_name": "agent_brick.default.sop_policy_index",
+        "columns": {
+          "id": "id",
+          "text": "chunk_text",
+          "source": "source_path"
+        }
+      },
+      "retrieval_config": {
+        "top_k": 10,
+        "score_threshold": 0.5
+      },
+      "llm_config": {
+        "retrieval_model": "databricks-meta-llama-3-1-70b-instruct",
+        "response_model": "databricks-meta-llama-3-1-70b-instruct",
+        "retrieval_temperature": 0.2,
+        "response_temperature": 0.7
+      }
+    }
+  }
+}

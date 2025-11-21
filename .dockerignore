@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.pytest_cache/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+creds.json
+
+# Documentation
+README.md
+*.md
+
+# Tests
+test_*.py
+tests/
+
+# Misc
+.DS_Store
+*.log

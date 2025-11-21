@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  # RAG Agent Service
+  agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sop-agent
+    ports:
+      - "9998:9998"
+    environment:
+      # Agent Settings
+      - AGENT_NAME=${AGENT_NAME:-Store Policy Assistant}
+      - AGENT_URL=${AGENT_URL:-http://localhost:9998}
+      - AGENT_STREAMING=${AGENT_STREAMING:-true}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+
+      # OpenAI
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+
+      # GCP Vertex AI RAG
+      - GCP_PROJECT_ID=${GCP_PROJECT_ID}
+      - GCP_LOCATION=${GCP_LOCATION:-us-central1}
+      - GCP_CORPUS_NAME=${GCP_CORPUS_NAME}
+      - GCP_SERVICE_ACCOUNT_JSON=${GCP_SERVICE_ACCOUNT_JSON:-/app/creds.json}
+      - GCP_VECTOR_TOP_K=${GCP_VECTOR_TOP_K:-8}
+      - GCP_VECTOR_SCORE_THRESHOLD=${GCP_VECTOR_SCORE_THRESHOLD:-0.6}
+
+      # PostgreSQL (if using persistence)
+      - POSTGRES_CONNECTION_STRING=${POSTGRES_CONNECTION_STRING:-postgresql://agent:agent_password@postgres:5432/sop_agent_db}
+    volumes:
+      # Mount credentials file if using service account
+      - ./creds.json:/app/creds.json:ro
+      # Mount config for easy updates
+      - ./config:/app/config:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - agent-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9998/.well-known/agent-card.json"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # PostgreSQL Database (for conversation persistence)
+  postgres:
+    image: postgres:15-alpine
+    container_name: sop-agent-postgres
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-sop_agent_db}
+      - POSTGRES_USER=${POSTGRES_USER:-agent}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-agent_password}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - agent-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Optional: pgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: sop-agent-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL:-admin@example.com}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD:-admin}
+      - PGADMIN_CONFIG_SERVER_MODE=False
+    ports:
+      - "5051:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - agent-network
+    restart: unless-stopped
+    profiles:
+      - tools
+
+volumes:
+  postgres-data:
+    driver: local
+  pgadmin-data:
+    driver: local
+
+networks:
+  agent-network:
+    driver: bridge

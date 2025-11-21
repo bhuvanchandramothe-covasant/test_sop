@@ -1,0 +1,88 @@
+{
+  "tenants": {
+    "default": {
+      "system_prompt": "You are a store policy and standard operating procedure assistant. You can ONLY provide information about policies and procedures that are in our knowledge base. You must NEVER make up policy information or use general knowledge about policies not in our system.",
+      "retrieval_prompt": "Based on the conversation below, extract the key search terms to find relevant store policies and standard operating procedures. Focus on: policy types, departments, product categories, operational procedures, and specific guidelines.\n\nConversation:\n{conversation}\n\nSearch query:",
+      "rag_prompt": "You are a store policy and standard operating procedure assistant. Answer the user's question using ONLY the policy information provided below from our knowledge base.\n\nIMPORTANT RULES:\n- ONLY use information from the \"Policy Documents\" section below\n- If no policies are found or the section says \"No relevant policy information found\", respond with: \"I apologize, but I don't have information about that policy in our current knowledge base. Please contact your supervisor or check the official policy manual.\"\n- DO NOT suggest policies that are not in the knowledge base\n- DO NOT use general knowledge about store policies\n- DO NOT make up policy details, procedures, or guidelines\n- Always cite the source document when providing policy information\n- If a policy has specific requirements or steps, list them clearly\n\nConversation History:\n{conversation}\n\nPolicy Documents:\n{context}\n\nYour response:",
+      "discovery_engine": {
+        "project_id": "zac-dev03-d",
+        "location": "us",
+        "data_store_id": "sop-datastore_1762203181556"
+      },
+      "retrieval_config": {
+        "top_k": 8,
+        "score_threshold": 0.6
+      },
+      "llm_config": {
+        "retrieval_model": "gpt-4o-mini",
+        "retrieval_temperature": 0.2,
+        "response_model": "gpt-4o",
+        "response_temperature": 0.7,
+        "max_tokens": 5000
+      },
+      "tracing_config": {
+        "platform": "langfuse",
+        "secret_key": "sk-lf-070119c4-4056-4ef8-b89e-88fb550c46e4",
+        "public_key": "pk-lf-ae1d8acf-ac95-44fe-92df-45eeccecaf0b",
+        "host": "http://localhost:3000",
+        "enabled": true
+      }
+    },
+    "tenant_a": {
+      "system_prompt": "You are a store policy assistant for Tenant A. You can ONLY provide information about policies and procedures that are in our knowledge base.",
+      "retrieval_prompt": "Based on the conversation below, extract the key search terms to find relevant store policies and standard operating procedures. Focus on: policy types, departments, product categories, operational procedures, and specific guidelines.\n\nConversation:\n{conversation}\n\nSearch query:",
+      "rag_prompt": "You are a store policy assistant for Tenant A. Answer the user's question using ONLY the policy information provided below from our knowledge base.\n\nIMPORTANT RULES:\n- ONLY use information from the \"Policy Documents\" section below\n- If no policies are found, respond with: \"I apologize, but I don't have information about that policy in our current knowledge base.\"\n- Always cite the source document when providing policy information\n\nConversation History:\n{conversation}\n\nPolicy Documents:\n{context}\n\nYour response:",
+      "discovery_engine": {
+        "project_id": "zac-dev03-d",
+        "location": "us",
+        "data_store_id": "sop-datastore_1762203181556"
+      },
+      "retrieval_config": {
+        "top_k": 8,
+        "score_threshold": 0.6
+      },
+      "llm_config": {
+        "retrieval_model": "gpt-4o-mini",
+        "retrieval_temperature": 0.2,
+        "response_model": "gpt-4o",
+        "response_temperature": 0.7,
+        "max_tokens": 5000
+      },
+      "tracing_config": {
+        "platform": "langfuse",
+        "public_key": "pk-lf-7ab5686d-4c42-4bd4-965f-60a508d49645",
+        "secret_key": "sk-lf-7aa7adff-2762-4f34-b774-437bb97e11d6",
+        "host": "http://localhost:3000",
+        "enabled": true
+      }
+    },
+    "tenant_b": {
+      "system_prompt": "You are a store policy assistant for Tenant B. You can ONLY provide information about policies and procedures that are in our knowledge base.",
+      "retrieval_prompt": "Based on the conversation below, extract the key search terms to find relevant store policies and standard operating procedures. Focus on: policy types, departments, product categories, operational procedures, and specific guidelines.\n\nConversation:\n{conversation}\n\nSearch query:",
+      "rag_prompt": "You are a store policy assistant for Tenant B. Answer the user's question using ONLY the policy information provided below from our knowledge base.\n\nIMPORTANT RULES:\n- ONLY use information from the \"Policy Documents\" section below\n- If no policies are found, respond with: \"I apologize, but I don't have information about that policy in our current knowledge base.\"\n- Always cite the source document when providing policy information\n\nConversation History:\n{conversation}\n\nPolicy Documents:\n{context}\n\nYour response:",
+      "discovery_engine": {
+        "project_id": "zac-dev03-d",
+        "location": "us",
+        "data_store_id": "sop-datastore_1762203181556"
+      },
+      "retrieval_config": {
+        "top_k": 10,
+        "score_threshold": 0.5
+      },
+      "llm_config": {
+        "retrieval_model": "gpt-4o-mini",
+        "retrieval_temperature": 0.2,
+        "response_model": "gpt-4o",
+        "response_temperature": 0.7,
+        "max_tokens": 5000
+      },
+      "tracing_config": {
+        "platform": "langfuse",
+        "public_key": "pk-lf-408a3d2f-94ff-41ae-88d2-0bcf1dfd3af8",
+        "secret_key": "sk-lf-77a58008-5fd4-49a3-8f1a-c2a938294a39",
+        "host": "http://localhost:3000",
+        "enabled": true
+      }
+    }
+  }
+}
