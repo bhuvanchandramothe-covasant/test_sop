@@ -1,5 +1,4 @@
 a2a-sdk[all]
-langchain-databricks>=0.1.0
 langchain-community>=0.2.0
 langchain>=0.2.0
 langgraph>=0.2.0
@@ -10,5 +9,3 @@ python-dotenv
 uvicorn
 fastapi
 pydantic_settings
-# Removed 'mlflow' because databricks-vectorsearch installs 'mlflow-skinny' automatically.
-# The python import 'import mlflow' will still work perfectly.
