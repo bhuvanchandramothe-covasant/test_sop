@@ -6,8 +6,9 @@ langgraph>=0.2.0
 langgraph-checkpoint-sqlite>=1.0.0
 databricks-vectorsearch
 databricks-sdk
-mlflow>=2.10.0
 python-dotenv
 uvicorn
 fastapi
 pydantic_settings
+# Removed 'mlflow' because databricks-vectorsearch installs 'mlflow-skinny' automatically.
+# The python import 'import mlflow' will still work perfectly.
